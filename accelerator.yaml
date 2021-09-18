@@ -1,0 +1,15 @@
+accelerator:
+  displayName: quarkus-petclinic-accelerator
+  description: ""
+  iconUrl: https://raw.githubusercontent.com/sample-accelerators/icons/master/icon-tanzu-light.png
+  tags:
+  - quarkus
+  - petclinic
+  options:
+  - name: optionName
+    label: Nice Label
+    display: true
+    defaultValue: ""
+engine:
+  include:
+  - '**'

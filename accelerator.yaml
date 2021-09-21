@@ -5,6 +5,7 @@ accelerator:
   tags:
   - quarkus
   - petclinic
+  - java
   options:
   - name: optionName
     label: Nice Label

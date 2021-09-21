@@ -1,3 +1,3 @@
-## Quarkus Petclinic and TAP
+## Quarkus Petclinic
 
-Quarkus petclinic project used to demo TAP
+Quarkus petclinic project

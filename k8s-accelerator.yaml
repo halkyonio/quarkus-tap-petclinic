@@ -7,3 +7,4 @@ spec:
     url: https://github.com/snowdrop/quarkus-tap-petclinic.git
     ref:
       branch: main
+    interval: 10s

@@ -6297,7 +6297,7 @@ button.close {
   background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.0001) 100%);
   background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.0001) 100%);
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.0001) 100%);
-  background-repeat: repeat-x;
+  background-repeat: no-repeat;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
 }
 .carousel-control.right {
@@ -6306,7 +6306,7 @@ button.close {
   background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.5) 100%);
   background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.5) 100%);
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0.0001) 0%, rgba(0, 0, 0, 0.5) 100%);
-  background-repeat: repeat-x;
+  background-repeat: no-repeat;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
 }
 .carousel-control:hover,
@@ -6785,7 +6785,7 @@ strong {
   display: block;
   width: 260px;
   height: 44px;
-  background: url("../images/quarkus_logo_200px_reverse.png") -1px -1px no-repeat;
+  background: url("../images/quarkus_logo_200px_reverse.png") 0px 0px no-repeat;
   opacity: 0;
   -moz-transition: opacity 0.12s ease-in-out;
   -webkit-transition: opacity 0.12s ease-in-out;

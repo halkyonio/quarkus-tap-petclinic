@@ -11,6 +11,10 @@ accelerator:
     label: Nice Label
     display: true
     defaultValue: ""
+#engine:
+#  include:
+#  - '**'
 engine:
-  include:
-  - '**'
+  sources:
+    - includes: [ "**" ]
+      excludes: [ "k8s-accelerator.yaml", "README.md" ]

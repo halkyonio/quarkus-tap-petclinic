@@ -6773,11 +6773,10 @@ strong {
   border-right: 0;
 }
 .navbar a.navbar-brand {
-/*  background: url("../images/quarkus_logo.png") ; */
   background: url("../images/quarkus_logo_200px_reverse.png") ;
   margin: 12px 0 6px;
-  width: 260px;
-  height: 44px;
+  width: 200px;
+  height: 32px;
   display: inline-block;
   text-decoration: none;
   padding: 0;
@@ -6786,8 +6785,7 @@ strong {
   display: block;
   width: 260px;
   height: 44px;
-  /*  background: url("../images/quarkus_logo.png") -1px -41px no-repeat; */
-  background: url("../images/quarkus_logo_200px_reverse.png") -1px -41px no-repeat;
+  background: url("../images/quarkus_logo_200px_reverse.png") -1px -1px no-repeat;
   opacity: 0;
   -moz-transition: opacity 0.12s ease-in-out;
   -webkit-transition: opacity 0.12s ease-in-out;
@@ -6839,10 +6837,9 @@ strong {
   .navbar a.navbar-brand {
     display: block;
     margin: 0 auto 0 auto;
-    width: 260px;
-    height: 44px;
+    width: 200px;
+    height: 32px;
     float: none;
-    /*  background: url("../images/quarkus_logo.png") 0 center no-repeat; */
     background: url("../images/quarkus_logo_200px_reverse.png") 0 center no-repeat;
   }
   .homepage-billboard .homepage-subtitle {

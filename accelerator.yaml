@@ -1,6 +1,6 @@
 accelerator:
-  displayName: quarkus-petclinic-accelerator
-  description: ""
+  displayName: Quarkus Petclinic
+  description: "A Quarkus Petclinic app"
   iconUrl: https://design.jboss.org/quarkus/logo/final/PNG/quarkus_icon_rgb_128px_default.png
   tags:
   - quarkus

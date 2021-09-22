@@ -7,10 +7,11 @@ accelerator:
   - petclinic
   - java
   options:
-  - name: optionName
-    label: Nice Label
-    display: true
-    defaultValue: ""
+    - name: repositoryPrefix
+      inputType: text
+      label: Prefix for the container image repository
+      defaultValue: dev.local
+      required: true
 
   - name: includeK8s
     label: "Include kubernetes resources?"
@@ -29,8 +30,12 @@ engine:
       transformations:
       - type: ReplaceText
         substitutions:
-          - text: quarkus-petclinic
-            with: "#artifactId"
+        - text: quarkus-petclinic
+          with: "#artifactId"
+      - type: ReplaceText
+        substitutions:
+        - text: dummy_repo
+          with: "#repositoryPrefix"
 
     - includes: ["README-application.md"]
       transformations:

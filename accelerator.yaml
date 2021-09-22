@@ -10,7 +10,7 @@ accelerator:
     - name: repositoryPrefix
       inputType: text
       label: Prefix for the container image repository
-      defaultValue: dev.local
+      defaultValue: dummy_repo
       required: true
 
   - name: includeK8s

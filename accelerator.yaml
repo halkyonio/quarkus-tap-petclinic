@@ -13,12 +13,12 @@ accelerator:
       defaultValue: dummy_repo
       required: true
 
-  - name: includeK8s
-    label: "Include kubernetes resources?"
-    inputType: toggle
-    dataType: boolean
-    defaultValue: true
-    required: true
+    - name: includeK8s
+      label: "Include kubernetes resources?"
+      inputType: toggle
+      dataType: boolean
+      defaultValue: true
+      required: true
 
 engine:
   sources:

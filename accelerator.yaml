@@ -32,11 +32,11 @@ engine:
           - text: quarkus-petclinic
             with: "#artifactId"
 
-  - includes: ["README-application.md"]
-    transformations:
-      - type: ReplaceText
-        substitutions:
-          - text: quarkus-petclinic
-            with: "#artifactId"
-      - type: RewritePath
-        rewriteTo: "README.md"
+    - includes: ["README-application.md"]
+      transformations:
+        - type: ReplaceText
+          substitutions:
+            - text: quarkus-petclinic
+              with: "#artifactId"
+        - type: RewritePath
+          rewriteTo: "README.md"

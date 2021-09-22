@@ -1,3 +1,5 @@
-## Quarkus Petclinic
+## Quarkus Petclinic accelerator
 
-Quarkus petclinic project
+A Quarkus Petclinic sample accelerator
+
+TODO: To be documented

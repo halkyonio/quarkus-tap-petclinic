@@ -11,10 +11,32 @@ accelerator:
     label: Nice Label
     display: true
     defaultValue: ""
-#engine:
-#  include:
-#  - '**'
+
+  - name: includeK8s
+    label: "Include kubernetes resources?"
+    inputType: toggle
+    dataType: boolean
+    defaultValue: true
+    required: true
+
 engine:
   sources:
     - includes: [ "**" ]
-      excludes: [ "k8s-accelerator.yaml", "README.md" ]
+      excludes: [ "k8s-accelerator.yaml","README-application.md","README.md"]
+
+    - includes: [ "k8s/deployment.yml", "k8s/service.yml" ]
+      condition: "#includeK8s"
+      transformations:
+      - type: ReplaceText
+        substitutions:
+          - text: quarkus-petclinic
+            with: "#artifactId"
+
+  - includes: ["README-application.md"]
+    transformations:
+      - type: ReplaceText
+        substitutions:
+          - text: quarkus-petclinic
+            with: "#artifactId"
+      - type: RewritePath
+        rewriteTo: "README.md"

@@ -39,4 +39,4 @@ engine:
             - text: quarkus-petclinic
               with: "#artifactId"
         - type: RewritePath
-          rewriteTo: "README.md"
+          rewriteTo: "'README.md'"

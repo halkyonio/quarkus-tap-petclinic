@@ -2,7 +2,11 @@
 
 <h2>Owner</h2>
 
-<form class="form-horizontal" id="add-owner-form" method="post" action="{#if owner.id is null}addOwner{#else}editOwner?ownerId={owner.id}{/if}" enctype="multipart/form-data">
+<form class="form-horizontal"
+      id="add-owner-form"
+      method="post"
+      action="{#if owner.id is null}/addOwner{#else}/editOwner?ownerId={owner.id}{/if}"
+      enctype="multipart/form-data">
     <div class="form-group has-feedback">
         <div class="form-group">
             <label class="col-sm-2 control-label">First Name</label>

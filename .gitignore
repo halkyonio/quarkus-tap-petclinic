@@ -7,3 +7,4 @@ target/*
 /target
 
 generated/
+/k8s/kpack/

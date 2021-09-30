@@ -4,6 +4,8 @@ A Quarkus Petclinic sample accelerator
 
 You can build the image using docker, jib or using kpack if it has been deployed on the k8s platform
 
+### Scenario tested using kpack deployed on a k8s cluster with a local docker registry
+
 Install kind and local registry locally (using registry version 2.6 !)
 ```bash
 git clone kind-tls-pwd-registry https://github.com/snowdrop/k8s-infra.git && cd k8s-infra/kind

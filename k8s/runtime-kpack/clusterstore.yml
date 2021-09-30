@@ -1,0 +1,7 @@
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStore
+metadata:
+  name: runtime
+spec:
+  sources:
+    - image: registry.local:5000/redhat-buildpacks/quarkus-java

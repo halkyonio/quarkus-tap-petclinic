@@ -1,0 +1,10 @@
+apiVersion: kpack.io/v1alpha1
+kind: ClusterStack
+metadata:
+  name: runtime
+spec:
+  id: "io.quarkus.buildpacks.stack.jvm"
+  buildImage:
+    image: "registry.local:5000/redhat-buildpacks/quarkus:build"
+  runImage:
+    image: "registry.local:5000/redhat-buildpacks/quarkus:run"

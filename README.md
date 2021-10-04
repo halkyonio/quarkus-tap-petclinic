@@ -4,6 +4,17 @@ A Quarkus Petclinic sample accelerator
 
 You can build the image using docker, jib or using kpack if it has been deployed on the k8s platform
 
+Table of Contents
+=================
+
+  * [Quarkus Petclinic accelerator](#quarkus-petclinic-accelerator)
+     * [Scenario tested using kpack deployed on a k8s cluster with a local docker registry](#scenario-tested-using-kpack-deployed-on-a-k8s-cluster-with-a-local-docker-registry)
+        * [Kpack controller](#kpack-controller)
+        * [Configure the runtime resources](#configure-the-runtime-resources)
+        * [Build an image](#build-an-image)
+        * [Deploy the quarkus application](#deploy-the-quarkus-application)
+  * [Additional notes](#additional-notes)
+  
 ### Scenario tested using kpack deployed on a k8s cluster with a local docker registry
 
 Install kind and local registry locally (using registry version 2.6 !)
@@ -34,32 +45,10 @@ docker login -u admin -p snowdrop registry.local:5000
 WARNING! Using --password via the CLI is insecure. Use --password-stdin.
 Login Succeeded
 ```
-### Using Tanzu Build Service
-Fetch the TBS images and push them to your local registry
-```bash
-imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.2" --to-repo registry.local:5000/kpack --registry-ca-cert-path $HOME/local-registry.crt
-```
-Extract the files to configure TBS to use your local registry
-```bash
-imgpkg pull -b "registry.local:5000/kpack:1.2.2" -o ./k8s/kpack --registry-ca-cert-path $HOME/local-registry.crt
-```
-Deploy TBS using your custom config
-```bash
-ytt -f ./k8s/kpack/values.yaml \
-    -f ./k8s/kpack/config/ \
-    -f $HOME/local-registry.crt \
-    -v docker_repository="registry.local:5000/" \
-    -v docker_username="admin" \
-    -v docker_password="snowdrop" \
-    | kbld -f ./k8s/kpack/.imgpkg/images.yml -f- \
-    | kapp deploy -a kpack -f- -y
 
-kapp delete -a kpack
-```
+#### Kpack controller
 
-### Using Kpack
-
-To be able to use the upstream [jpack](https://github.com/pivotal/kpack) project, it is needed to install a webhook able to inject the `selfsigned container registry`.
+To be able to use the upstream [kpack](https://github.com/pivotal/kpack) project, it is needed to install a webhook able to inject the `selfsigned container registry`.
 This is why the following steps are needed:
 ```bash
 git clone -b https://github.com/ch007m/cert-injection-webhook.git && cd cert-injection-webhook
@@ -99,7 +88,7 @@ ytt -f ./k8s/kpack-upstream/values.yaml \
 kapp delete -a kpack
 ```
 
-### Configure the runtime resources
+#### Configure the runtime resources
 Create a secret to access your local registry
 ```bash
 kubectl create ns demo
@@ -121,6 +110,8 @@ kapp deploy -a runtime-kpack \
 
 kapp delete -a runtime-kpack -y
 ```
+
+#### Build an image
 To build a quarkus buildpack image using the code of the local project
 ```bash
 # To be executed at the root of the project ;-)
@@ -141,6 +132,7 @@ To delete the image/build
 kp image delete quarkus-petclinic-image -n demo
 ```
 
+#### Deploy the quarkus application
 We can now deploy the application
 ```bash
 kapp deploy -a quarkus-petclinic \
@@ -151,3 +143,29 @@ kapp deploy -a quarkus-petclinic \
 kapp delete -a quarkus-petclinic -n -y
 ```
 and play with it from the browser `http://localhost:31000` :-)
+
+## Additional notes
+
+If you prefer to use Tanzu Build Service and not kpack, then follow the steps described hereafter
+
+Fetch the TBS images and push them to your local registry
+```bash
+imgpkg copy -b "registry.pivotal.io/build-service/bundle:1.2.2" --to-repo registry.local:5000/kpack --registry-ca-cert-path $HOME/local-registry.crt
+```
+Extract the files to configure TBS to use your local registry
+```bash
+imgpkg pull -b "registry.local:5000/kpack:1.2.2" -o ./k8s/kpack --registry-ca-cert-path $HOME/local-registry.crt
+```
+Deploy TBS using your custom config
+```bash
+ytt -f ./k8s/kpack/values.yaml \
+    -f ./k8s/kpack/config/ \
+    -f $HOME/local-registry.crt \
+    -v docker_repository="registry.local:5000/" \
+    -v docker_username="admin" \
+    -v docker_password="snowdrop" \
+    | kbld -f ./k8s/kpack/.imgpkg/images.yml -f- \
+    | kapp deploy -a kpack -f- -y
+
+kapp delete -a kpack
+```

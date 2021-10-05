@@ -2,7 +2,7 @@
 
    * [Table of Contents](#table-of-contents)
    * [Quarkus Petclinic accelerator](#quarkus-petclinic-accelerator)
-   * [1. Scenario tested using a pod able to perform the buildpack steps](#1-scenario-tested-using-a-pod-able-to-perform-the-buildpack-steps)
+   * [1. Scenario to be re-tested using a pod able to perform the buildpack steps](#1-scenario-to-be-re-tested-using-a-pod-able-to-perform-the-buildpack-steps)
    * [2. Scenario tested using kpack deployed on a k8s cluster with a local docker registry](#2-scenario-tested-using-kpack-deployed-on-a-k8s-cluster-with-a-local-docker-registry)
       * [Kpack controller](#kpack-controller)
       * [Deploy the runtime resources](#deploy-the-runtime-resources)
@@ -16,7 +16,7 @@ A Quarkus Petclinic sample accelerator
 
 You can build the image using docker, jib or using kpack if it has been deployed on the k8s platform
   
-## 1. Scenario tested using a pod able to perform the buildpack steps
+## 1. Scenario to be re-tested using a pod able to perform the buildpack steps
 
 To perform a build of a project available from a git repository, deploy then the following `deployment` manifest.
 **NOTE**: The manifest should be improved as it contains the selfsigned certificate (generated from a previous kind deployment) like the credentials to access a local container registry `local.registry:5000`

@@ -19,6 +19,7 @@ You can build the image using docker, jib or using kpack if it has been deployed
 ## 1. Scenario to be re-tested using a pod able to perform the buildpack steps
 
 To perform a build of a project available from a git repository, deploy then the following `deployment` manifest.
+
 **NOTE**: The manifest should be improved as it contains the selfsigned certificate (generated from a previous kind deployment) like the credentials to access a local container registry `local.registry:5000`
 
 ```bash

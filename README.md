@@ -22,14 +22,16 @@ Install kind and a private secured/TLS registry locally (using registry version 
 git clone kind-tls-pwd-registry https://github.com/snowdrop/k8s-infra.git && cd k8s-infra/kind
 ./k8s/kind-tls-secured-reg.sh
 ```
-Build the quarkus buildpack images using the upstream project andpush the images to the local registry: `local.registry:5000`
+**NOTE**: The certificate generated is copied within the file `$HOME/local-registry.crt` and the user, password to be used to be authenticated with the registry are respectively` admin` and `snwodrop`
+
+Build the quarkus buildpack images using the upstream project and push the images to the local registry: `local.registry:5000`
 ```bash
 git clone https://github.com/quarkusio/quarkus-buildpacks.git && cd quarkus-buildpacks
 
-# Generate the buildpacks image (pack ...)
-./k8s/create-buildpacks.sh
+# Generate the buildpack quarkus images (build, run and builder)
+./create-buildpacks.sh
 
-# Tag and push the images to a private docker registry
+# Tag and push the images to the private docker registry
 export REGISTRY_URL="registry.local:5000"
 docker tag redhat/buildpacks-builder-quarkus-jvm:latest ${REGISTRY_URL}/redhat-buildpacks/quarkus-java:latest
 docker tag redhat/buildpacks-stack-quarkus-run:jvm ${REGISTRY_URL}/redhat-buildpacks/quarkus:run
@@ -45,8 +47,9 @@ docker push ${REGISTRY_URL}/redhat-buildpacks/quarkus:run
 To be able to use the upstream [kpack](https://github.com/pivotal/kpack) project with a TLS secured registry, it is needed to install a webhook on kubernetes
 able to inject the `selfsigned certificate` of the registry.
 
-This is why it is needed to execute the following steps to: 
+This is why it is needed to execute the following commands described hereafter to: 
 - Build the images needed (to run a webhook, inject the certificate),
+- Generate the k8s manifest yaml file deploying the webhook,
 - To configure the webhook to fetch pod having a specific label (e.g. `image.kpack.io/image`),
 - To be able to inject in a pod an `initContainer` which will, from a secret, deploy the certificate using `/usr/sbin/update-ca-certificates`, 
 
@@ -75,7 +78,9 @@ kapp delete -a inject-cert-webhook -y
 ```
 **NOTE**: The label `image.kpack.io/image` allows to inject the cert within all the pods which are created to build an image using kpack and buildpack builders.
 
-Next, we can deploy kpack upstream
+Next, we can deploy kpack using ytt and overlay files. They have been created part of this project to patch the upstream release.yaml file in order the issues reported [issue-845](https://github.com/pivotal/kpack/issues/845) and [issue-844](https://github.com/pivotal/kpack/issues/844).
+They will allow to inject the registry selfsigned certificate and to let the kpack controller to be logged with the registry using the mounted `.dockercfgjson` file
+
 ```bash
 ytt -f ./k8s/kpack-upstream/values.yaml \
     -f ./k8s/kpack-upstream/config/ \

@@ -1,21 +1,31 @@
+## Table of Contents
+
+   * [Table of Contents](#table-of-contents)
+   * [Quarkus Petclinic accelerator](#quarkus-petclinic-accelerator)
+   * [1. Scenario tested using a pod able to perform the buildpack steps](#1-scenario-tested-using-a-pod-able-to-perform-the-buildpack-steps)
+   * [2. Scenario tested using kpack deployed on a k8s cluster with a local docker registry](#2-scenario-tested-using-kpack-deployed-on-a-k8s-cluster-with-a-local-docker-registry)
+      * [Kpack controller](#kpack-controller)
+      * [Deploy the runtime resources](#deploy-the-runtime-resources)
+      * [Build an image](#build-an-image)
+      * [Deploy the quarkus application](#deploy-the-quarkus-application)
+   * [Additional notes](#additional-notes)
+   
 ## Quarkus Petclinic accelerator
 
 A Quarkus Petclinic sample accelerator
 
 You can build the image using docker, jib or using kpack if it has been deployed on the k8s platform
-
-Table of Contents
-=================
-
-  * [Quarkus Petclinic accelerator](#quarkus-petclinic-accelerator)
-     * [Scenario tested using kpack deployed on a k8s cluster with a local docker registry](#scenario-tested-using-kpack-deployed-on-a-k8s-cluster-with-a-local-docker-registry)
-        * [Kpack controller](#kpack-controller)
-        * [Deploy the runtime resources](#deploy-the-runtime-resources)
-        * [Build an image](#build-an-image)
-        * [Deploy the quarkus application](#deploy-the-quarkus-application)
-  * [Additional notes](#additional-notes)
   
-### Scenario tested using kpack deployed on a k8s cluster with a local docker registry
+## 1. Scenario tested using a pod able to perform the buildpack steps
+
+To perform a build of a project available from a git repository, deploy then the following `deployment` manifest.
+**NOTE**: The manifest should be improved as it contains the selfsigned certificate (generated from a previous kind deployment) like the credentials to access a local container registry `local.registry:5000`
+
+```bash
+kubectl apply -f k8s/build-dep.yml
+```
+
+## 2. Scenario tested using kpack deployed on a k8s cluster with a local docker registry
 
 Install kind and a private secured/TLS registry locally (using registry version 2.6 !)
 ```bash
@@ -42,7 +52,7 @@ docker push ${REGISTRY_URL}/redhat-buildpacks/quarkus:build
 docker push ${REGISTRY_URL}/redhat-buildpacks/quarkus:run
 ```
 
-#### Kpack controller
+### Kpack controller
 
 To be able to use the upstream [kpack](https://github.com/pivotal/kpack) project with a TLS secured registry, it is needed to install a webhook on kubernetes
 able to inject the `selfsigned certificate` of the registry.
@@ -93,7 +103,7 @@ ytt -f ./k8s/kpack-upstream/values.yaml \
 kapp delete -a kpack
 ```
 
-#### Deploy the runtime resources
+### Deploy the runtime resources
 Create a secret to access your local registry
 ```bash
 kubectl create ns demo
@@ -116,7 +126,7 @@ kapp deploy -a runtime-kpack \
 kapp delete -a runtime-kpack -y
 ```
 
-#### Build an image
+### Build an image
 To build a quarkus buildpack image using the code of the local project
 ```bash
 # To be executed at the root of the project ;-)
@@ -137,7 +147,7 @@ To delete the image/build
 kp image delete quarkus-petclinic-image -n demo
 ```
 
-#### Deploy the quarkus application
+### Deploy the quarkus application
 We can now deploy the application
 ```bash
 kapp deploy -a quarkus-petclinic \

@@ -10,7 +10,7 @@ Table of Contents
   * [Quarkus Petclinic accelerator](#quarkus-petclinic-accelerator)
      * [Scenario tested using kpack deployed on a k8s cluster with a local docker registry](#scenario-tested-using-kpack-deployed-on-a-k8s-cluster-with-a-local-docker-registry)
         * [Kpack controller](#kpack-controller)
-        * [Configure the runtime resources](#configure-the-runtime-resources)
+        * [Deploy the runtime resources](#deploy-the-runtime-resources)
         * [Build an image](#build-an-image)
         * [Deploy the quarkus application](#deploy-the-quarkus-application)
   * [Additional notes](#additional-notes)
@@ -93,7 +93,7 @@ ytt -f ./k8s/kpack-upstream/values.yaml \
 kapp delete -a kpack
 ```
 
-#### Configure the runtime resources
+#### Deploy the runtime resources
 Create a secret to access your local registry
 ```bash
 kubectl create ns demo

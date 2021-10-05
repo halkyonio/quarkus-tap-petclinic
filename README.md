@@ -31,13 +31,13 @@ git clone https://github.com/quarkusio/quarkus-buildpacks.git && cd quarkus-buil
 
 # Tag and push the images to a private docker registry
 export REGISTRY_URL="registry.local:5000"
-docker tag redhat/buildpacks-builder-quarkus-jvm:latest $REGISTRY_URL/redhat-buildpacks/quarkus-java:latest
-docker tag redhat/buildpacks-stack-quarkus-run:jvm $REGISTRY_URL/redhat-buildpacks/quarkus:run
-docker tag redhat/buildpacks-stack-quarkus-build:jvm $REGISTRY_URL/redhat-buildpacks/quarkus:build
+docker tag redhat/buildpacks-builder-quarkus-jvm:latest ${REGISTRY_URL}/redhat-buildpacks/quarkus-java:latest
+docker tag redhat/buildpacks-stack-quarkus-run:jvm ${REGISTRY_URL}/redhat-buildpacks/quarkus:run
+docker tag redhat/buildpacks-stack-quarkus-build:jvm ${REGISTRY_URL}/redhat-buildpacks/quarkus:build
 
-docker push $REGISTRY_URL/redhat-buildpacks/quarkus-java:latest
-docker push $REGISTRY_URL/redhat-buildpacks/quarkus:build
-docker push $REGISTRY_URL/redhat-buildpacks/quarkus:run
+docker push ${REGISTRY_URL}/redhat-buildpacks/quarkus-java:latest
+docker push ${REGISTRY_URL}/redhat-buildpacks/quarkus:build
+docker push ${REGISTRY_URL}/redhat-buildpacks/quarkus:run
 ```
 
 #### Kpack controller
@@ -48,22 +48,22 @@ able to inject the `selfsigned certificate` of the registry.
 This is why it is needed to execute the following steps to: 
 - Build the images needed (to run a webhook, inject the certificate),
 - To configure the webhook to fetch pod having a specific label (e.g. `image.kpack.io/image`),
-- To be able to inject in a pod an `initContainer` which will, from a secret deploy the certificate using `/usr/sbin/update-ca-certificates`, 
+- To be able to inject in a pod an `initContainer` which will, from a secret, deploy the certificate using `/usr/sbin/update-ca-certificates`, 
 
 **NOTE**: Please use the `paketobuildpacks/builder:base` ad the default builder which is `tiny` do not include the command `/usr/sbin/update-ca-certificates` - see [ticket](https://github.com/vmware-tanzu/cert-injection-webhook/issues/9)!
 ```bash
 git clone -b https://github.com/ch007m/cert-injection-webhook.git && cd cert-injection-webhook
 REGISTRY_URL="registry.local:5000"
-pack build $REGISTRY_URL/setup-ca-cert -e BP_GO_TARGETS="./cmd/setup-ca-certs" -B paketobuildpacks/builder:base
-pack build $REGISTRY_URL/pod-webhook -e BP_GO_TARGETS="./cmd/pod-webhook"
-docker push registry.local:5000/setup-ca-cert
-docker push registry.local:5000/pod-webhook
+pack build ${REGISTRY_URL}/setup-ca-cert -e BP_GO_TARGETS="./cmd/setup-ca-certs" -B paketobuildpacks/builder:base
+pack build ${REGISTRY_URL}/pod-webhook -e BP_GO_TARGETS="./cmd/pod-webhook"
+docker push ${REGISTRY_URL}/setup-ca-cert
+docker push ${REGISTRY_URL}/pod-webhook
   
 LABELS="image.kpack.io/image"
-$ ytt -f ./deployments/k8s \
-      -v pod_webhook_image="$REGISTRY_URL/pod-webhook" \
-      -v setup_ca_certs_image="$REGISTRY_URL/setup-ca-cert" \
-      -v docker_server="https://registry.local:5000" \
+ytt   -f ./deployments/k8s \
+      -v pod_webhook_image="${REGISTRY_URL}/pod-webhook" \
+      -v setup_ca_certs_image="${REGISTRY_URL}/setup-ca-cert" \
+      -v docker_server="https://${REGISTRY_URL}" \
       -v docker_username="admin" \
       -v docker_password="snowdrop" \
       --data-value-file ca_cert_data=$HOME/local-registry.crt \
@@ -80,7 +80,7 @@ Next, we can deploy kpack upstream
 ytt -f ./k8s/kpack-upstream/values.yaml \
     -f ./k8s/kpack-upstream/config/ \
     -f $HOME/local-registry.crt \
-    -v docker_repository="registry.local:5000/" \
+    -v docker_repository="${REGISTRY_URL}/" \
     -v docker_username="admin" \
     -v docker_password="snowdrop" \
     | kapp deploy -a kpack -f- -y
@@ -93,7 +93,7 @@ Create a secret to access your local registry
 ```bash
 kubectl create ns demo
 kubectl create secret docker-registry registry-creds -n demo \
-  --docker-server="https://registry.local:5000" \
+  --docker-server="https://${REGISTRY_URL}" \
   --docker-username="admin" \
   --docker-password="snowdrop"
   

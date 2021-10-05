@@ -55,7 +55,7 @@ This is why it is needed to execute the following commands described hereafter t
 
 **NOTE**: Please use the `paketobuildpacks/builder:base` ad the default builder which is `tiny` do not include the command `/usr/sbin/update-ca-certificates` - see [ticket](https://github.com/vmware-tanzu/cert-injection-webhook/issues/9)!
 ```bash
-git clone -b https://github.com/ch007m/cert-injection-webhook.git && cd cert-injection-webhook
+git clone -b support-private-docker-registry https://github.com/ch007m/cert-injection-webhook.git && cd cert-injection-webhook
 REGISTRY_URL="registry.local:5000"
 pack build ${REGISTRY_URL}/setup-ca-cert -e BP_GO_TARGETS="./cmd/setup-ca-certs" -B paketobuildpacks/builder:base
 pack build ${REGISTRY_URL}/pod-webhook -e BP_GO_TARGETS="./cmd/pod-webhook"
@@ -66,7 +66,7 @@ LABELS="image.kpack.io/image"
 ytt   -f ./deployments/k8s \
       -v pod_webhook_image="${REGISTRY_URL}/pod-webhook" \
       -v setup_ca_certs_image="${REGISTRY_URL}/setup-ca-cert" \
-      -v docker_server="https://${REGISTRY_URL}" \
+      -v docker_server="${REGISTRY_URL}/" \
       -v docker_username="admin" \
       -v docker_password="snowdrop" \
       --data-value-file ca_cert_data=$HOME/local-registry.crt \

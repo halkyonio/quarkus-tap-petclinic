@@ -62,7 +62,7 @@ kubectl create secret docker-registry registry-creds -n demo \
   --docker-server="${REGISTRY_URL}" \
   --docker-username="admin" \
   --docker-password="snowdrop"
-
+```
 Next deploy the deployment resource able to perform a build using a runtime example (e.g. )
 ```bash
 kubectl apply -f k8s/build-pod/manifest.yml

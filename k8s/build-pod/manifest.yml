@@ -256,11 +256,11 @@ spec:
              echo "## Plan.toml content"
              cat /layers/plan.toml
 
-             echo "## project-metadata.toml content"
-             cat /layers/project-metadata.toml || exit
+             #echo "## project-metadata.toml content"
+             #cat /layers/project-metadata.toml
 
-             echo "## Report content"
-             cat /var/report/report.toml || exit
+             #echo "## Report content"
+             #cat /var/report/report.toml || exit
          volumeMounts:
            - name: layers-dir
              mountPath: /layers

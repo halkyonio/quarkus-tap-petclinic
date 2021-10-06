@@ -18,12 +18,59 @@ You can build the image using docker, jib or using kpack if it has been deployed
   
 ## 1. Scenario to be re-tested using a pod able to perform the buildpack steps
 
-To perform a build of a project available from a git repository, deploy then the following `deployment` manifest.
-
-**NOTE**: The manifest should be improved as it contains the selfsigned certificate (generated from a previous kind deployment) like the credentials to access a local container registry `local.registry:5000`
-
+Build the quarkus buildpack images using the upstream project and push the images to the local registry: `local.registry:5000`
 ```bash
-kubectl apply -f k8s/build-dep.yml
+git clone https://github.com/quarkusio/quarkus-buildpacks.git && cd quarkus-buildpacks
+
+# Generate the buildpack quarkus images (build, run and builder)
+./create-buildpacks.sh
+
+# Tag and push the images to the private docker registry
+export REGISTRY_URL="registry.local:5000"
+docker tag redhat/buildpacks-builder-quarkus-jvm:latest ${REGISTRY_URL}/redhat-builder/quarkus:latest
+docker tag redhat/buildpacks-stack-quarkus-run:jvm ${REGISTRY_URL}/redhat-buildpacks/quarkus:run
+docker tag redhat/buildpacks-stack-quarkus-build:jvm ${REGISTRY_URL}/redhat-buildpacks/quarkus:build
+
+docker push ${REGISTRY_URL}/redhat-builder/quarkus:latest
+docker push ${REGISTRY_URL}/redhat-buildpacks/quarkus:build
+docker push ${REGISTRY_URL}/redhat-buildpacks/quarkus:run
+```
+
+As the `builder` image packages the lifecycle creator but also the `run` and `build` image, it is important to get its SHA in order
+to use the matching image deployed on k8s. You can get it using this command `docker images --no-trunc --quiet redhat/buildpacks-builder-quarkus-jvm:latest`
+
+Deploy next on the registry needed images
+```bash
+docker pull alpine:3.14 && \
+  docker tag alpine:3.14 ${REGISTRY_URL}/alpine:3.14 && \
+  docker push ${REGISTRY_URL}/alpine:3.14
+docker pull busybox:1.28 && \
+  docker tag busybox:1.28 ${REGISTRY_URL}/busybox:1.28 && \
+  docker push ${REGISTRY_URL}/busybox:1.28 
+```
+
+Next, create a configMap containing the selfsigned certificate of the container registry under the namespace `demo`
+```bash
+kubectl create ns demo
+kc create -n demo cm local-registry-cert --from-file $HOME/local-registry.crt
+```
+
+Create a secret to access your local registry
+```bash
+export REGISTRY_URL="registry.local:5000"
+kubectl create secret docker-registry registry-creds -n demo \
+  --docker-server="${REGISTRY_URL}" \
+  --docker-username="admin" \
+  --docker-password="snowdrop"
+
+Next deploy the deployment resource able to perform a build using a runtime example (e.g. )
+```bash
+kubectl apply -f k8s/build-pod/manifest.yml
+kubectl delete -f k8s/build-pod/manifest.yml
+```
+Watch the progression of the build 
+```bash
+kubectl -n demo logs -lapp=quarkus-petclinic-image-build -c build -f
 ```
 
 ## 2. Scenario tested using kpack deployed on a k8s cluster with a local docker registry

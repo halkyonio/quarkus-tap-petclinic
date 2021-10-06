@@ -241,6 +241,31 @@ spec:
              readOnly: true
              mountPath: /etc/ssl/certs
          imagePullPolicy: IfNotPresent
+       - name: check-analysed-toml
+         image: registry.local:5000/busybox:1.28
+         command: [ "/bin/sh","-c" ]
+         args:
+           - |
+             set -e
+             echo "## Analysed.toml content"
+             cat /layers/analyzed.toml
+
+             echo "## Plan.toml content"
+             cat /layers/group.toml
+
+             echo "## Plan.toml content"
+             cat /layers/plan.toml
+
+             echo "## project-metadata.toml content"
+             cat /layers/project-metadata.toml || exit
+
+             echo "## Report content"
+             cat /var/report/report.toml || exit
+         volumeMounts:
+           - name: layers-dir
+             mountPath: /layers
+           - name: report-dir
+             mountPath: /var/report
        - name: export
          image: registry.local:5000/redhat-builder/quarkus@sha256:48d7e7d7d94e57fec510d45fb8df970e449ca1dd82dfab4960da57b2d083ff87
          command:
@@ -256,6 +281,7 @@ spec:
            - '-report=/var/report/report.toml'
            - '-process-type=web'
            - 'registry.local:5000/quarkus-petclinic'
+           - 'registry.local:5000/quarkus-petclinic:b1.20211008'
          env:
            - name: HOME
              value: /builder/home

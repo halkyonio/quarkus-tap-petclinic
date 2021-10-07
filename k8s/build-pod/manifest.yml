@@ -77,10 +77,10 @@ spec:
              echo -e "\n## Updating the ca certificates"
              update-ca-certificates
 
-             echo "## Copy the .dockerconfigjson from the secret to the home builder"
-             mkdir -m 777 -p /home/builder/.docker
-             cp /config.json /home/builder/.docker/config.json
-             cat /home/builder/.docker/config.json
+             echo "## Copy the .dockerconfigjson from the secret to the builder home"
+             mkdir -m 777 -p /builder/home/.docker
+             cp /config.json /builder/home/.docker/config.json
+             cat /builder/home/.docker/config.json
 
              # To verify the certificate installed
              # cat /etc/ssl/certs/ca-certificates.crt | grep "VQQKDAdSZWQgSGF0MREwDwYDVQQLDAhTbm93ZHJvcDESMBAG"

@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: default
-  namespace: demo
-secrets:
-  - name: registry-creds
-imagePullSecrets:
-  - name: registry-creds

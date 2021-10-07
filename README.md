@@ -36,26 +36,13 @@ docker push ${REGISTRY_URL}/redhat-buildpacks/quarkus:build
 docker push ${REGISTRY_URL}/redhat-buildpacks/quarkus:run
 ```
 
-As the `builder` image packages the lifecycle creator but also the `run` and `build` image, it is important to get its SHA in order
-to use the matching image deployed on k8s. You can get it using this command `docker images --no-trunc --quiet redhat/buildpacks-builder-quarkus-jvm:latest`
-
-Deploy next on the registry needed images
-```bash
-docker pull alpine:3.14 && \
-  docker tag alpine:3.14 ${REGISTRY_URL}/alpine:3.14 && \
-  docker push ${REGISTRY_URL}/alpine:3.14
-docker pull busybox:1.28 && \
-  docker tag busybox:1.28 ${REGISTRY_URL}/busybox:1.28 && \
-  docker push ${REGISTRY_URL}/busybox:1.28 
-```
-
-Next, create a configMap containing the selfsigned certificate of the container registry under the namespace `demo`
+Next, create a configMap containing the selfsigned certificate of the docker registry under the namespace `demo`
 ```bash
 kubectl create ns demo
 kc create -n demo cm local-registry-cert --from-file $HOME/local-registry.crt
 ```
 
-Create a secret to access your local registry
+Create a secret containing the `docker json cfg` file with `auths`
 ```bash
 export REGISTRY_URL="registry.local:5000"
 kubectl create secret docker-registry registry-creds -n demo \

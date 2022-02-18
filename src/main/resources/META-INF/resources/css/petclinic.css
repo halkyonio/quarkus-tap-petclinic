@@ -6773,7 +6773,7 @@ strong {
   border-right: 0;
 }
 .navbar a.navbar-brand {
-  background: url("../imgs/quarkus_logo_200px_reverse.png") ;
+  background: url("../images/quarkus_logo_200px_reverse.png") ;
   margin: 12px 0 6px;
   width: 200px;
   height: 32px;
@@ -6785,7 +6785,7 @@ strong {
   display: block;
   width: 260px;
   height: 44px;
-  background: url("../imgs/quarkus_logo_200px_reverse.png") 0px 0px no-repeat;
+  background: url("../images/quarkus_logo_200px_reverse.png") 0px 0px no-repeat;
   opacity: 0;
   -moz-transition: opacity 0.12s ease-in-out;
   -webkit-transition: opacity 0.12s ease-in-out;
@@ -6840,7 +6840,7 @@ strong {
     width: 200px;
     height: 32px;
     float: none;
-    background: url("../imgs/quarkus_logo_200px_reverse.png") 0 center no-repeat;
+    background: url("../images/quarkus_logo_200px_reverse.png") 0 center no-repeat;
   }
   .homepage-billboard .homepage-subtitle {
     font-size: 21px;
